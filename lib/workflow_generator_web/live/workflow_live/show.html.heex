@@ -1,0 +1,29 @@
+<.header>
+  Workflow <%= @workflow.id %>
+  <:subtitle>This is a workflow record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/workflows/#{@workflow}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit workflow</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @workflow.name %></:item>
+  <:item title="Description"><%= @workflow.description %></:item>
+  <:item title="Enabled"><%= @workflow.enabled %></:item>
+  <:item title="Input"><%= @workflow.input %></:item>
+</.list>
+
+<.back navigate={~p"/workflows"}>Back to workflows</.back>
+
+<.modal :if={@live_action == :edit} id="workflow-modal" show on_cancel={JS.patch(~p"/workflows/#{@workflow}")}>
+  <.live_component
+    module={WorkflowGeneratorWeb.WorkflowLive.FormComponent}
+    id={@workflow.id}
+    title={@page_title}
+    action={@live_action}
+    workflow={@workflow}
+    patch={~p"/workflows/#{@workflow}"}
+  />
+</.modal>

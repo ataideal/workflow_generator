@@ -1,0 +1,40 @@
+<.header>
+  Listing Workflow steps
+  <:actions>
+    <.link patch={~p"/workflow_steps/new"}>
+      <.button>New Workflow step</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="workflow_steps"
+  rows={@streams.workflow_steps}
+  row_click={fn {_id, workflow_step} -> JS.navigate(~p"/workflow_steps/#{workflow_step}") end}
+>
+  <:action :let={{_id, workflow_step}}>
+    <div class="sr-only">
+      <.link navigate={~p"/workflow_steps/#{workflow_step}"}>Show</.link>
+    </div>
+    <.link patch={~p"/workflow_steps/#{workflow_step}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, workflow_step}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: workflow_step.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="workflow_step-modal" show on_cancel={JS.patch(~p"/workflow_steps")}>
+  <.live_component
+    module={WorkflowGeneratorWeb.WorkflowStepLive.FormComponent}
+    id={@workflow_step.id || :new}
+    title={@page_title}
+    action={@live_action}
+    workflow_step={@workflow_step}
+    patch={~p"/workflow_steps"}
+  />
+</.modal>

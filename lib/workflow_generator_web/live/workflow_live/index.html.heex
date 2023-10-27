@@ -1,0 +1,44 @@
+<.header>
+  Listing Workflows
+  <:actions>
+    <.link patch={~p"/workflows/new"}>
+      <.button>New Workflow</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="workflows"
+  rows={@streams.workflows}
+  row_click={fn {_id, workflow} -> JS.navigate(~p"/workflows/#{workflow}") end}
+>
+  <:col :let={{_id, workflow}} label="Name"><%= workflow.name %></:col>
+  <:col :let={{_id, workflow}} label="Description"><%= workflow.description %></:col>
+  <:col :let={{_id, workflow}} label="Enabled"><%= workflow.enabled %></:col>
+  <:col :let={{_id, workflow}} label="Input"><%= workflow.input %></:col>
+  <:action :let={{_id, workflow}}>
+    <div class="sr-only">
+      <.link navigate={~p"/workflows/#{workflow}"}>Show</.link>
+    </div>
+    <.link patch={~p"/workflows/#{workflow}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, workflow}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: workflow.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="workflow-modal" show on_cancel={JS.patch(~p"/workflows")}>
+  <.live_component
+    module={WorkflowGeneratorWeb.WorkflowLive.FormComponent}
+    id={@workflow.id || :new}
+    title={@page_title}
+    action={@live_action}
+    workflow={@workflow}
+    patch={~p"/workflows"}
+  />
+</.modal>

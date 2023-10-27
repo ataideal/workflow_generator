@@ -1,0 +1,25 @@
+<.header>
+  Workflow step <%= @workflow_step.id %>
+  <:subtitle>This is a workflow_step record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/workflow_steps/#{@workflow_step}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit workflow_step</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+</.list>
+
+<.back navigate={~p"/workflow_steps"}>Back to workflow_steps</.back>
+
+<.modal :if={@live_action == :edit} id="workflow_step-modal" show on_cancel={JS.patch(~p"/workflow_steps/#{@workflow_step}")}>
+  <.live_component
+    module={WorkflowGeneratorWeb.WorkflowStepLive.FormComponent}
+    id={@workflow_step.id}
+    title={@page_title}
+    action={@live_action}
+    workflow_step={@workflow_step}
+    patch={~p"/workflow_steps/#{@workflow_step}"}
+  />
+</.modal>

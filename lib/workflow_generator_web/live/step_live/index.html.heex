@@ -1,0 +1,43 @@
+<.header>
+  Listing Steps
+  <:actions>
+    <.link patch={~p"/steps/new"}>
+      <.button>New Step</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="steps"
+  rows={@streams.steps}
+  row_click={fn {_id, step} -> JS.navigate(~p"/steps/#{step}") end}
+>
+  <:col :let={{_id, step}} label="Name"><%= step.name %></:col>
+  <:col :let={{_id, step}} label="Code"><%= step.code %></:col>
+  <:col :let={{_id, step}} label="Input"><%= step.input %></:col>
+  <:action :let={{_id, step}}>
+    <div class="sr-only">
+      <.link navigate={~p"/steps/#{step}"}>Show</.link>
+    </div>
+    <.link patch={~p"/steps/#{step}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, step}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: step.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="step-modal" show on_cancel={JS.patch(~p"/steps")}>
+  <.live_component
+    module={WorkflowGeneratorWeb.StepLive.FormComponent}
+    id={@step.id || :new}
+    title={@page_title}
+    action={@live_action}
+    step={@step}
+    patch={~p"/steps"}
+  />
+</.modal>
