@@ -6,7 +6,11 @@ defmodule WorkflowGeneratorWeb.WorkflowLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :workflows, System.list_workflows())}
+    {
+      :ok,
+      stream(socket, :workflows, System.list_workflows())
+      |> assign(:steps, System.list_steps())
+    }
   end
 
   @impl true
@@ -23,7 +27,7 @@ defmodule WorkflowGeneratorWeb.WorkflowLive.Index do
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Workflow")
-    |> assign(:workflow, %Workflow{})
+    |> assign(:workflow, %Workflow{steps: []})
   end
 
   defp apply_action(socket, :index, _params) do

@@ -18,7 +18,7 @@ defmodule WorkflowGenerator.System do
 
   """
   def list_workflows do
-    Repo.all(Workflow)
+    Repo.all(Workflow) |> Repo.preload(:steps)
   end
 
   @doc """
@@ -35,7 +35,7 @@ defmodule WorkflowGenerator.System do
       ** (Ecto.NoResultsError)
 
   """
-  def get_workflow!(id), do: Repo.get!(Workflow, id)
+  def get_workflow!(id), do: Repo.get!(Workflow, id) |> Repo.preload(:steps)
 
   @doc """
   Creates a workflow.
@@ -263,6 +263,15 @@ defmodule WorkflowGenerator.System do
     step
     |> Step.changeset(attrs)
     |> Repo.update()
+    |> case do
+      {:ok, step} ->
+        %{workflows: workflows} = Repo.preload(step, workflows: [:steps])
+        Enum.each(workflows, &WorkflowGenerator.Generator.generate_module/1)
+        {:ok, step}
+      {:error, error} ->
+        {:error, error}
+    end
+
   end
 
   @doc """

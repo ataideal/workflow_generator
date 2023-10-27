@@ -17,7 +17,8 @@ defmodule WorkflowGenerator.Application do
       # Start a worker by calling: WorkflowGenerator.Worker.start_link(arg)
       # {WorkflowGenerator.Worker, arg},
       # Start to serve requests, typically the last entry
-      WorkflowGeneratorWeb.Endpoint
+      WorkflowGeneratorWeb.Endpoint,
+      WorkflowGenerator.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

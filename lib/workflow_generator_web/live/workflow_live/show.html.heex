@@ -12,7 +12,7 @@
   <:item title="Name"><%= @workflow.name %></:item>
   <:item title="Description"><%= @workflow.description %></:item>
   <:item title="Enabled"><%= @workflow.enabled %></:item>
-  <:item title="Input"><%= @workflow.input %></:item>
+  <:item title="Input"><%= inspect(@workflow.input) %></:item>
 </.list>
 
 <.back navigate={~p"/workflows"}>Back to workflows</.back>
@@ -25,5 +25,6 @@
     action={@live_action}
     workflow={@workflow}
     patch={~p"/workflows/#{@workflow}"}
+    steps={@steps}
   />
 </.modal>

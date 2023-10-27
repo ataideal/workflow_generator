@@ -12,26 +12,19 @@ defmodule WorkflowGenerator.System.Workflow do
     field :input, :map
     field :name, :string
 
-    has_many :workflow_steps, WorkflowStep
-    has_many :steps, through: [:workflow_steps, :steps]
+    has_many :workflow_steps, WorkflowStep, on_replace: :delete
+    has_many :steps, through: [:workflow_steps, :step]
 
     timestamps(type: :utc_datetime)
   end
 
   @doc false
   def changeset(workflow, attrs) do
-    attrs = cast_json(attrs, :input)
-
     workflow
     |> cast(attrs, [:name, :description, :enabled, :input])
+    |> cast_assoc(:workflow_steps)
     |> validate_required([:name, :description, :enabled])
+    |> IO.inspect()
   end
 
-  defp cast_json(attrs, field) do
-    if is_binary(attrs[field])  do
-      Jason.decode(attrs[field])
-    else
-      attrs[field]
-    end
-  end
 end

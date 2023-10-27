@@ -15,7 +15,7 @@
   <:col :let={{_id, workflow}} label="Name"><%= workflow.name %></:col>
   <:col :let={{_id, workflow}} label="Description"><%= workflow.description %></:col>
   <:col :let={{_id, workflow}} label="Enabled"><%= workflow.enabled %></:col>
-  <:col :let={{_id, workflow}} label="Input"><%= workflow.input %></:col>
+  <:col :let={{_id, workflow}} label="Input"><%= Jason.encode!(workflow.input) %></:col>
   <:action :let={{_id, workflow}}>
     <div class="sr-only">
       <.link navigate={~p"/workflows/#{workflow}"}>Show</.link>
@@ -40,5 +40,6 @@
     action={@live_action}
     workflow={@workflow}
     patch={~p"/workflows"}
+    steps={@steps}
   />
 </.modal>

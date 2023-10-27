@@ -13,8 +13,8 @@
   row_click={fn {_id, step} -> JS.navigate(~p"/steps/#{step}") end}
 >
   <:col :let={{_id, step}} label="Name"><%= step.name %></:col>
-  <:col :let={{_id, step}} label="Code"><%= step.code %></:col>
-  <:col :let={{_id, step}} label="Input"><%= step.input %></:col>
+  <%!-- <:col :let={{_id, step}} label="Code"><%= step.code %></:col> --%>
+  <%!-- <:col :let={{_id, step}} label="Input"><%= step.input %></:col> --%>
   <:action :let={{_id, step}}>
     <div class="sr-only">
       <.link navigate={~p"/steps/#{step}"}>Show</.link>

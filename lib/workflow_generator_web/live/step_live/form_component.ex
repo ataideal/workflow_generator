@@ -20,7 +20,7 @@ defmodule WorkflowGeneratorWeb.StepLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:name]} type="text" label="Name" />
-        <.input field={@form[:code]} type="text" label="Code" />
+        <.input field={@form[:code]} type="textarea" label="Code" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Step</.button>
         </:actions>
