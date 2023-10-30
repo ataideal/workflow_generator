@@ -12,7 +12,7 @@ defmodule WorkflowGenerator.System.Workflow do
     field :input, :map
     field :name, :string
 
-    has_many :workflow_steps, WorkflowStep, on_replace: :delete
+    has_many :workflow_steps, WorkflowStep, on_delete: :delete_all, on_replace: :delete
     has_many :steps, through: [:workflow_steps, :step]
 
     timestamps(type: :utc_datetime)

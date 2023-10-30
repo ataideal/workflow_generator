@@ -53,6 +53,14 @@ defmodule WorkflowGenerator.System do
     %Workflow{}
     |> Workflow.changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, workflow} ->
+        workflow = Repo.preload(workflow, :steps)
+        WorkflowGenerator.Generator.generate_module(workflow)
+        {:ok, workflow}
+      {:error, error} ->
+        {:error, error}
+    end
   end
 
   @doc """
@@ -71,6 +79,14 @@ defmodule WorkflowGenerator.System do
     workflow
     |> Workflow.changeset(attrs)
     |> Repo.update()
+    |> case do
+      {:ok, workflow} ->
+        workflow = Repo.preload(workflow, :steps)
+        WorkflowGenerator.Generator.generate_module(workflow)
+        {:ok, workflow}
+      {:error, error} ->
+        {:error, error}
+    end
   end
 
   @doc """
